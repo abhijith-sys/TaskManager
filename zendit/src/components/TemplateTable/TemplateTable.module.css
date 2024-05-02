@@ -1,0 +1,41 @@
+.tableContainer {
+  border: 1px solid #D1D4D7;
+}
+
+.rowEven {
+  background-color: #f2f2f2;
+}
+
+.rowOdd {
+  background-color: #ffffff;
+}
+
+.cell {
+  height:50px !important;
+  font-size: 14px ;
+}
+
+.createdBy {
+  display: flex;
+  align-items: center;
+}
+
+.createdBy img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+
+.btn{
+  border: none;
+  cursor: pointer;
+}
