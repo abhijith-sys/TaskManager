@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styles from "./Temlates.module.css"
 import SearchInput from '../../components/common/SearchInput/SearchInput';
 import TemplateTable from '../../components/TemplateTable/TemplateTable';
+import { Link, useNavigate } from 'react-router-dom';
+import PathConstants from '../../router/PathConstants';
 
 
 
@@ -9,6 +11,7 @@ import TemplateTable from '../../components/TemplateTable/TemplateTable';
 
 
 const Templates = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
 
@@ -26,12 +29,18 @@ const Templates = () => {
   ];
   const handleEyeClick = (id) => {
     console.log('Clicked on eye icon for row with ID:', id);
+
+    navigate(PathConstants.TEMPLATEADD);
   };
+
+  const toTemplateAdd =()=>{
+    navigate(PathConstants.TEMPLATEADD);
+  }
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
         <h4 className={styles.title}>Templates</h4>
-        <div className={styles.addBtn}>
+        <div className={styles.addBtn} onClick={toTemplateAdd}>
           + Add new
         </div>
       </div>

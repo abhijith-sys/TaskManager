@@ -56,8 +56,10 @@ const TemplateTable = ({ nodes, onEyeClick }) => {
                       <span>{row.createdBy}</span>
                     </div>
                   </Cell>
-                  <Cell className={`${styles.cell} ${row.status === 'Active' ? styles.green : styles.red}`}>
-                    {row.status}
+                  <Cell className={`${styles.cell} `}>
+                    <div  className={`${styles.chip}  ${row.status === 'Active' ? styles.green : styles.red}`}>
+                        {row.status}
+                    </div>
                   </Cell>
                   <Cell className={styles.cell}>
                     <button className={styles.btn}  onClick={() => onEyeClick(row.id)}>

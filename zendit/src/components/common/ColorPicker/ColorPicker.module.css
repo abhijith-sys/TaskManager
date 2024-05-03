@@ -1,0 +1,49 @@
+.colorBoxContainer {
+  width: 40%;
+
+}
+
+.colorBoxStyle {
+  display: flex;
+  height: 30px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 5px;
+  padding-left: 10px;
+  border-radius: 6px;
+}
+
+.placehold {
+  color: #707D89;
+  font-size: 12px;
+
+}
+
+.popover {
+  position: absolute;
+  z-index: 2;
+
+
+}
+
+;
+
+.cover {
+  position: fixed;
+  top: 0px;
+  right: 10px;
+  bottom: 0px;
+
+}
+
+
+
+.colorSection {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+
+  cursor: pointer;
+}

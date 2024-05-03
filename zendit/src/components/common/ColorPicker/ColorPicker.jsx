@@ -1,0 +1,65 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { ChromePicker } from 'react-color';
+import styles from "./ColorPicker.module.css";
+import drop from "../../../assets/icons/aroowDown.svg"
+
+const ColorPicker = ({ defaultColor, defaultText, onColorChange }) => {
+    const [selectedColor, setSelectedColor] = useState(defaultColor || '#000000');
+    const [displayColorPicker, setDisplayColorPicker] = useState(false);
+    const colorPickerRef = useRef(null);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (
+                colorPickerRef.current &&
+                !colorPickerRef.current.contains(event.target) &&
+                !event.target.classList.contains(styles.cover) // Check if clicked element is not the cover
+            ) {
+                setDisplayColorPicker(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+
+    const handleClick = () => {
+        setDisplayColorPicker(!displayColorPicker);
+    };
+
+    const handleChangeColor = (color) => {
+        setSelectedColor(color.hex);
+        onColorChange(color.hex);
+    };
+
+    const colorSquareStyle = {
+        width: '28px',
+        height: '28px',
+        borderRadius: '5px',
+        backgroundColor: selectedColor,
+        cursor: 'pointer',
+    };
+
+    return (
+        <div className={styles.colorBoxContainer}>
+            <div className={styles.colorBoxStyle} ref={colorPickerRef}>
+                <span className={styles.placehold}>{defaultText}</span>
+                <div className={styles.colorSection} onClick={handleClick}>
+                    <img src={drop} alt="" srcset="" />
+                    <div style={colorSquareStyle}  />
+                </div>
+
+            </div>
+            {displayColorPicker && (
+                <div className={styles.popover}>
+                    <div className={styles.cover} onClick={() => setDisplayColorPicker(false)} />
+                    <ChromePicker color={selectedColor} onChange={handleChangeColor} />
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default ColorPicker;

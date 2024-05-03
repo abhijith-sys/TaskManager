@@ -1,0 +1,377 @@
+.container {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+
+}
+
+.topSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  padding-top: 10px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+
+.bottomSection {
+  background-color: #FFFFFF;
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.firstSection {
+  display: flex;
+  /* width: 100%; */
+  justify-content: space-between;
+
+}
+
+.dropdownWidth {
+  height: 40px;
+  font-size: 12px;
+}
+
+.title {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.selectItems {
+  font-size: 12px;
+}
+
+.inputField {
+  width: 50%;
+}
+
+.secondSection {
+  padding: 10px;
+
+}
+
+.secondSectionInputs {
+  padding-top: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.autocomplete {
+  width: 100%;
+  padding: 10px;
+
+
+}
+
+.thirdSection {
+  position: relative;
+  background-color: #f7f7f7;
+  /* width: 100%; */
+  min-height: 100px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.MilestoneFileds {
+  width: 40%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  position: relative;
+
+}
+
+.input {
+  margin-top: 2px !important;
+}
+
+.addTask {
+  background-color: #6666b3;
+  color: #FFFFFF;
+  font-size: 12px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  border-radius: 8px;
+  height: 30px;
+  width: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.saveSection {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.saveBtn {
+  border: 1px solid #000080;
+  width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  justify-content: center;
+  color: #000080;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.submitSection {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+
+.cancel {
+  border: 1px solid #E8E9EB;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit {
+  background-color: #000080;
+  color: #FFFFFF;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addNewMilstone {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  color: #000080;
+  padding: 10px;
+  /* height: 40px; */
+  gap: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+
+}
+
+.plusIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 128, 0.0706);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropDownContents {
+  padding: 10px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.63);
+}
+
+.taskAddSection {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.taskLists {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2px;
+  padding: 10px;
+}
+
+.taskConatiner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+
+}
+
+.taskDetailsConatiner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+
+.taskIndex {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background-color: #000080;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  font-size: 12;
+}
+
+.taskName {
+  font-size: 12px;
+}
+
+.taskActionConatiner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.mileStoneList {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2px;
+  padding: 10px;
+}
+
+.mileStoneContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.mileStoneTopSecion {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+}
+
+.mileStoneSubSecion {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+}
+
+.mileStoneNameContianer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+
+.mileStoneName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  border: 1px solid #000080;
+  padding: 5px;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.mileStoneName{
+  font-size: 12px;
+  color: #000080;
+}
+
+.actionContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.taskChip{
+  display: flex;
+  width: fit-content;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f3f5f6;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.taskIndexRound{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #000080;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  font-size: 10;
+}
+
+.taskNameSmall{
+  font-size: 10px;
+}

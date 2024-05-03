@@ -1,7 +1,8 @@
 const PathConstants = {
     HOME: "/",
     TEAM: "/team",
-    TEMPLATES:"templates"
+    TEMPLATES:"templates",
+    TEMPLATEADD:"/templateform"
 }
 
 export default PathConstants
