@@ -15,10 +15,12 @@ import deletIcon from "../../assets/icons/delete.svg"
 import editIcon from "../../assets/icons/edit.svg"
 import expandIcon from "../../assets/icons/expand.svg"
 import star from "../../assets/icons/star.svg"
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const AddTemplate = () => {
-  const [selectedTemplate, setselectedTemplate] = useState("")
-
+  const [selectedTemplate, setselectedTemplate] = useState("");
+  const [newTask, setNewTask] = useState('')
+  const [hint, setHint] = useState('');
 
   const dummyMilestoneData = [
 
@@ -45,15 +47,30 @@ const AddTemplate = () => {
     { label: "Add New" }
   ];
 
-  const tasks = {
-    "Milestone 1": ["Task1", "Task2", "Task3", "Task4", "Task5"],
-    "Milestone 2": ["Task6", "Task7", "Task8"],
-    "Milestone 3": ["Task9", "Task10"],
-    "Milestone 4": ["Task11"],
-    "Milestone 5": ["Task12", "Task13", "Task14", "Task15"]
-  };
-  const [hint, setHint] = useState('');
+  const [tasks, setTasks] = useState({
+    "Milestone 1": [{ taskName: "Task1", id: "1" }, { taskName: "Task2", id: "2" }, { taskName: "Task3", id: "3" }, { taskName: "Task4", id: "4" }, { taskName: "Task5", id: "5" }],
+    "Milestone 2": [{ taskName: "Task6", id: "6" }, { taskName: "Task7", id: "7" }, { taskName: "Task8", id: "8" }],
+    "Milestone 3": [{ taskName: "Task9", id: "9" }, { taskName: "Task10", id: "10" }],
+    "Milestone 4": [{ taskName: "Task11", id: "11" }],
+    "Milestone 5": [{ taskName: "Task12", id: "12" }, { taskName: "Task13", id: "13" }, { taskName: "Task14", id: "14" }, { taskName: "Task15", id: "15" }]
+  });
 
+  const addTaskToMilestone = () => {
+    if (newTask.trim().length > 0 && selectedTemplate) {
+      const taskId = (Math.random() * 1000000).toString(); // Generating a unique ID
+      setTasks(prevTasks => {
+        if (prevTasks.hasOwnProperty(selectedTemplate)) {
+          return {
+            ...prevTasks,
+            [selectedTemplate]: [...prevTasks[selectedTemplate], { taskName: newTask, id: taskId }]
+          };
+        } else {
+          return prevTasks;
+        }
+      });
+    }
+    setNewTask("");
+  };
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -198,37 +215,56 @@ const AddTemplate = () => {
                     <span className={styles.title}>Task name </span>
                     <TextField
                       className={styles.input}
-
+                      onChange={(event) => { setNewTask(event.target.value) }}
+                      value={newTask}
                       id="outlined-password-input"
                       placeholder="Please type task name"
                       type="text"
-                      
+
                     />
                   </div>
-                  <div className={styles.addTask}>
+                  <div className={styles.addTask} onClick={addTaskToMilestone}>
                     Add task
                   </div>
                 </div>
                 {/* task list */}
-                <div className={styles.taskLists}>
+                <DragDropContext >
+                  <Droppable droppableId="droppable">
+                    {(provided, snapshot) => (
+                      <div className={styles.taskLists}  {...provided.droppableProps}
+                        ref={provided.innerRef}>
 
-                  {tasks[selectedTemplate]?.map((task, index) => (
-                    <div className={styles.taskConatiner} >
-                    <div className={styles.taskDetailsConatiner}>
-                      <div className={styles.taskIndex}>{index}</div>
-                      <span className={styles.taskName}>{task}</span>
-                    </div>
+                        {tasks[selectedTemplate]?.map((task, index) => (
+                          <Draggable key={task.id} draggableId={task.id} index={index}>
+                            {(provided, snapshot) => (
+                              <div  ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                 >
+                                <div {...provided.dragHandleProps} className={styles.taskConatiner}>
+                                  <div className={styles.taskDetailsConatiner}>
+                                    <div className={styles.taskIndex}>{index + 1}</div>
+                                    <span className={styles.taskName}>{task.taskName}</span>
+                                  </div>
 
-                    <div className={styles.taskActionConatiner} >
-                      <img src={deletIcon} alt="delete" />
-                      <img src={editIcon} alt="edit" />
-                      <img src={expandIcon} alt="expand" />
-                    </div>
-                  </div>
-                  ))}
-                  
-                </div>
+                                  <div className={styles.taskActionConatiner} >
+                                    <img src={deletIcon} alt="delete" />
+                                    <img src={editIcon} alt="edit" />
+                                    <img src={expandIcon} alt="expand" />
+                                  </div>
+                                </div>
 
+                              </div>
+                            )}
+
+                          </Draggable>
+                        ))}
+
+                        {provided.placeholder}
+                      </div>
+                    )}
+
+                  </Droppable>
+                </DragDropContext>
               </div>
 
               <div className={styles.saveSection}>
