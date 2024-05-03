@@ -71,6 +71,49 @@ const AddTemplate = () => {
     }
     setNewTask("");
   };
+
+  const onDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+  
+    if (!destination) {
+      return;
+    }
+  
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+  
+    // Check if both source and destination milestones exist in tasks state
+    if (!tasks[source.droppableId] || !tasks[destination.droppableId]) {
+      console.error("Source or destination milestone not found in tasks state");
+      return;
+    }
+  
+    const sourceMilestone = tasks[source.droppableId];
+    const destinationMilestone = tasks[destination.droppableId];
+  
+    const updatedSourceMilestone = sourceMilestone.filter(
+      (task) => task.id !== draggableId
+    );
+  
+    const updatedDestinationMilestone = [
+      ...destinationMilestone.slice(0, destination.index),
+      { taskName: draggableId, id: draggableId },
+      ...destinationMilestone.slice(destination.index)
+    ];
+  
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [source.droppableId]: updatedSourceMilestone,
+      [destination.droppableId]: updatedDestinationMilestone
+    }));
+  };
+  
+  
+  
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -228,7 +271,7 @@ const AddTemplate = () => {
                   </div>
                 </div>
                 {/* task list */}
-                <DragDropContext >
+                <DragDropContext onDragEnd={onDragEnd} >
                   <Droppable droppableId="droppable">
                     {(provided, snapshot) => (
                       <div className={styles.taskLists}  {...provided.droppableProps}
@@ -237,9 +280,9 @@ const AddTemplate = () => {
                         {tasks[selectedTemplate]?.map((task, index) => (
                           <Draggable key={task.id} draggableId={task.id} index={index}>
                             {(provided, snapshot) => (
-                              <div  ref={provided.innerRef}
+                              <div ref={provided.innerRef}
                                 {...provided.draggableProps}
-                                 >
+                              >
                                 <div {...provided.dragHandleProps} className={styles.taskConatiner}>
                                   <div className={styles.taskDetailsConatiner}>
                                     <div className={styles.taskIndex}>{index + 1}</div>
