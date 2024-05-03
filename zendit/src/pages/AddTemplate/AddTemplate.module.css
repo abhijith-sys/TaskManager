@@ -254,7 +254,7 @@
   justify-content: center;
   align-items: center;
   color: #FFFFFF;
-  font-size: 12;
+  font-size: 12px;
 }
 
 .taskName {
@@ -317,6 +317,7 @@
   align-items: center;
   text-align: center;
   gap: 10px;
+  font-size: 12px;
 }
 
 .mileStoneName {
@@ -330,12 +331,13 @@
   border-radius: 10px;
   padding-left: 10px;
   padding-right: 10px;
+  font-size: 10px;
+  color: #000080;
 
 }
 
-.mileStoneName{
-  font-size: 12px;
-  color: #000080;
+.mileStoneNamealign{
+margin-top: 2px;
 }
 
 .actionContainer{
@@ -343,6 +345,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
   gap: 20px;
 }
 

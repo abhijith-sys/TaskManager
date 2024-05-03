@@ -17,26 +17,43 @@ import expandIcon from "../../assets/icons/expand.svg"
 import star from "../../assets/icons/star.svg"
 
 const AddTemplate = () => {
-
-  const [selectedColor, setSelectedColor] = useState('#FFA500'); // Default color
-
-
-  const handleColorChange = (color) => {
-    setSelectedColor(color);
-  };
+  const [selectedTemplate, setselectedTemplate] = useState("")
 
 
   const dummyMilestoneData = [
 
-    { label: 'Milestone 1' },
-    { label: 'Milestone 2' },
-    { label: 'Milestone 3' },
-    { label: 'Milestone 4' },
-    { label: 'Milestone 5' },
+    {
+      label: 'Milestone 1',
+
+    },
+    {
+      label: 'Milestone 2',
+
+    },
+    {
+      label: 'Milestone 3',
+
+    },
+    {
+      label: 'Milestone 4',
+
+    },
+    {
+      label: 'Milestone 5',
+
+    },
     { label: "Add New" }
   ];
-  const [inputValue, setInputValue] = React.useState('');
-  const [hint, setHint] = React.useState('');
+
+  const tasks = {
+    "Milestone 1": ["Task1", "Task2", "Task3", "Task4", "Task5"],
+    "Milestone 2": ["Task6", "Task7", "Task8"],
+    "Milestone 3": ["Task9", "Task10"],
+    "Milestone 4": ["Task11"],
+    "Milestone 5": ["Task12", "Task13", "Task14", "Task15"]
+  };
+  const [hint, setHint] = useState('');
+
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -44,16 +61,24 @@ const AddTemplate = () => {
       </div>
       <div className={styles.bottomSection}>
         <Formik
-          initialValues={{ templateType: ' ', milestoneName: '', taskName: '' }}
-          onSubmit={(values) => {
-            console.log(values);
+          initialValues={{
+            templateType: '', templateName: '', progressColor: '#FFA500',
+            completedColor: '#008000', delayedColor: '#FF0000',
+            milestones: [{ name: '', tasks: [''] }]
           }}
+
+          onSubmit={(values, { resetForm }) => {
+            console.log(values);
+            // You can perform submission logic here
+            resetForm();
+          }}
+
         >
-          {({ values, handleChange, handleBlur, errors }) => (
+          {({ values, handleChange, handleBlur, errors, setFieldValue }) => (
             <Form>
               <div className={styles.firstSection} >
                 <FormControl sx={{ m: 1, minWidth: 120 }} className={styles.inputField}>
-                  <span className={styles.title}>Temlate type </span>
+                  <span className={styles.title}>Template type </span>
                   <Select
                     name="templateType"
                     placeholder="select"
@@ -67,41 +92,40 @@ const AddTemplate = () => {
                       select
                     </MenuItem>
 
-                    <MenuItem value="option1" className={styles.selectItems}>Option 1</MenuItem>
-                    <MenuItem value="option2" className={styles.selectItems}>Option 2</MenuItem>
+                    <MenuItem value="option1" className={styles.selectItems}>Crane</MenuItem>
+                    <MenuItem value="option2" className={styles.selectItems}>Installa</MenuItem>
                   </Select>
                   <ErrorMessage name="templateType" component="div" className={styles.error} />
                 </FormControl>
 
                 <FormControl sx={{ m: 1, minWidth: 120 }} className={styles.inputField}>
-                  <span className={styles.title}>Temlate name </span>
+                  <span className={styles.title}>Template name </span>
                   <Select
-                    name="templateType"
-                    value={values.templateType}
-                    onChange={handleChange('templateType')}
-                    onBlur={handleBlur('templateType')}
+                    name="templateName"
+                    value={values.templateName}
+                    onChange={handleChange('templateName')}
+                    onBlur={handleBlur('templateName')}
                     className={styles.dropdownWidth}
                   >
                     <MenuItem value=" " disabled className={styles.selectItems}>
                       Please select
                     </MenuItem>
 
-                    <MenuItem value="option1" className={styles.selectItems}>Option 1</MenuItem>
-                    <MenuItem value="option2" className={styles.selectItems}>Option 2</MenuItem>
+                    <MenuItem value="option1" className={styles.selectItems}>name  1</MenuItem>
+                    <MenuItem value="option2" className={styles.selectItems}>name 2</MenuItem>
                   </Select>
                   <ErrorMessage name="templateType" component="div" className={styles.error} />
                 </FormControl>
               </div>
               <div className={styles.secondSection} >
+                {/* color pickers */}
                 <span className={styles.title}>Colours </span>
                 <div className={styles.secondSectionInputs}>
-                  <ColorPicker defaultColor="#FFA500" defaultText="Progressing colour" onColorChange={handleColorChange} />
-                  <ColorPicker defaultColor="#008000" defaultText="Completed colour" onColorChange={handleColorChange} />
-                  <ColorPicker defaultColor="#FF0000" defaultText="Delayed colour" onColorChange={handleColorChange} />
+                  <ColorPicker defaultColor={values.progressColor} defaultText="Progressing colour" onColorChange={(color) => setFieldValue('progressColor', color)} />
+                  <ColorPicker defaultColor={values.completedColor} defaultText="Completed colour" onColorChange={(color) => setFieldValue('completedColor', color)} />
+                  <ColorPicker defaultColor={values.progressColor} defaultText="Delayed colour" onColorChange={(color) => setFieldValue('delayedColor', color)}
+                  />
                 </div>
-
-
-
               </div>
               <div className={styles.thirdSection}>
                 <div className={styles.taskAddSection} >
@@ -110,12 +134,12 @@ const AddTemplate = () => {
                     <Autocomplete
 
                       sx={{ height: '38px' }}
-                      value={inputValue}
+                      value={selectedTemplate}
                       onChange={(event, newValue) => {
-                        setInputValue(newValue ? newValue.label : '');
+                        setselectedTemplate(newValue ? newValue.label : '');
                         setHint(newValue ? newValue.label : '');
                       }}
-                      inputValue={inputValue}
+                      inputValue={selectedTemplate}
                       options={dummyMilestoneData}
                       getOptionLabel={(option) => option.label}
                       filterOptions={(options, state) => {
@@ -134,12 +158,12 @@ const AddTemplate = () => {
                           label=""
                           placeholder="please type"
                           onChange={(event) => {
-                            setInputValue(event.target.value)
+                            setselectedTemplate(event.target.value)
                           }}
                           onBlur={() => setHint('')}
                           onKeyDown={(event) => {
                             if (event.key === 'Tab') {
-                              setInputValue(hint);
+                              setselectedTemplate(hint);
                               event.preventDefault();
                             }
                           }}
@@ -177,20 +201,22 @@ const AddTemplate = () => {
 
                       id="outlined-password-input"
                       placeholder="Please type task name"
-                      type="password"
-                      autoComplete="current-password"
+                      type="text"
+                      
                     />
                   </div>
                   <div className={styles.addTask}>
                     Add task
                   </div>
                 </div>
-
+                {/* task list */}
                 <div className={styles.taskLists}>
-                  <div className={styles.taskConatiner} >
+
+                  {tasks[selectedTemplate]?.map((task, index) => (
+                    <div className={styles.taskConatiner} >
                     <div className={styles.taskDetailsConatiner}>
-                      <div className={styles.taskIndex}>1</div>
-                      <span className={styles.taskName}>Task 1</span>
+                      <div className={styles.taskIndex}>{index}</div>
+                      <span className={styles.taskName}>{task}</span>
                     </div>
 
                     <div className={styles.taskActionConatiner} >
@@ -199,18 +225,8 @@ const AddTemplate = () => {
                       <img src={expandIcon} alt="expand" />
                     </div>
                   </div>
-                  <div className={styles.taskConatiner} >
-                    <div className={styles.taskDetailsConatiner}>
-                      <div className={styles.taskIndex}>1</div>
-                      <span className={styles.taskName}>Task 1</span>
-                    </div>
-
-                    <div className={styles.taskActionConatiner} >
-                      <img src={deletIcon} alt="delete" />
-                      <img src={editIcon} alt="edit" />
-                      <img src={expandIcon} alt="expand" />
-                    </div>
-                  </div>
+                  ))}
+                  
                 </div>
 
               </div>
@@ -220,7 +236,7 @@ const AddTemplate = () => {
                   Save/Add new milestone
                 </div>
               </div>
-{/* milestone lists */}
+              {/* milestone lists */}
               <div className={styles.mileStoneList}>
                 <div className={styles.mileStoneContainer}>
                   <div className={styles.mileStoneTopSecion}>
@@ -228,7 +244,7 @@ const AddTemplate = () => {
                       <span>Milestone name :</span>
                       <div className={styles.mileStoneName}>
                         <img src={star} alt="*" />
-                        <span> Milestone1</span>
+                        <span className={styles.mileStoneNamealign}> Milestone1</span>
                       </div>
                     </div>
                     <div className={styles.actionContainer}>
@@ -247,7 +263,7 @@ const AddTemplate = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className={styles.submitSection}>
                 <div className={styles.cancel}>
                   Cancel
