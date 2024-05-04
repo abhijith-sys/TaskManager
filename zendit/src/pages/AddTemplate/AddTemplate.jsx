@@ -24,6 +24,7 @@ const AddTemplate = () => {
   const [newTask, setNewTask] = useState('')
   const [hint, setHint] = useState('');
   const [modalIsOpen, setIsOpen] = useState(false);
+  
   const openModal = () => {
     setIsOpen(true);
   }
@@ -203,6 +204,7 @@ const AddTemplate = () => {
                   <div className={styles.MilestoneFileds}>
                     <span className={styles.title}>MileStone name  <span className={styles.required}>*</span></span>
                     <Autocomplete
+                      disablePortal
                       sx={{ height: '38px' }}
                       value={selectedTemplate}
                       onChange={(event, newValue) => {
@@ -219,7 +221,7 @@ const AddTemplate = () => {
                         const filteredOptions = options?.filter((option) =>
                           option?.label?.toLowerCase()?.includes(state?.inputValue?.toLowerCase())
                         );
-                        if (filteredOptions.length == 0) {
+                        if (filteredOptions.length === 0) {
                           filteredOptions.push({ label: "error" });
                         }
                         if (!filteredOptions.some(option => option.label === "Add New")) {

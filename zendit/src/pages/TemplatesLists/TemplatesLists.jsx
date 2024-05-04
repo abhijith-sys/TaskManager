@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "./TemlatesLists.module.css"
 import SearchInput from '../../components/common/SearchInput/SearchInput';
 import TemplateTable from '../../components/TemplateTable/TemplateTable';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PathConstants from '../../router/PathConstants';
 
 
@@ -14,6 +14,9 @@ const TemlatesLists = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    console.log("search", searchQuery);
+  }, [searchQuery])
 
 
   const handleSearchInputChange = (value) => {
@@ -33,7 +36,7 @@ const TemlatesLists = () => {
     navigate(PathConstants.TEMPLATEADD);
   };
 
-  const toTemplateAdd =()=>{
+  const toTemplateAdd = () => {
     navigate(PathConstants.TEMPLATEADD);
   }
   return (
@@ -46,8 +49,8 @@ const TemlatesLists = () => {
       </div>
 
       <div className={styles.bottomSection}>
-      <SearchInput onInputChange={handleSearchInputChange} />
-      <TemplateTable nodes={dummyData} onEyeClick={handleEyeClick}/>
+        <SearchInput onInputChange={handleSearchInputChange} />
+        <TemplateTable nodes={dummyData} onEyeClick={handleEyeClick} />
       </div>
     </div>
   )
