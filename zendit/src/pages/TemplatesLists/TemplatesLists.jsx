@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styles from "./Temlates.module.css"
+import styles from "./TemlatesLists.module.css"
 import SearchInput from '../../components/common/SearchInput/SearchInput';
 import TemplateTable from '../../components/TemplateTable/TemplateTable';
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import PathConstants from '../../router/PathConstants';
 
 
@@ -10,7 +10,7 @@ import PathConstants from '../../router/PathConstants';
 
 
 
-const Templates = () => {
+const TemlatesLists = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -53,4 +53,4 @@ const Templates = () => {
   )
 }
 
-export default Templates
+export default TemlatesLists

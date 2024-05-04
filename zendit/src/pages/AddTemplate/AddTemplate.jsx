@@ -4,23 +4,34 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Formik, Form, ErrorMessage } from 'formik';
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import ColorPicker from '../../components/common/ColorPicker/ColorPicker';
-
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Modal from 'react-modal';
 
-import { Popper } from '@mui/material';
 import plusIcon from "../../assets/icons/plus.svg"
 import deletIcon from "../../assets/icons/delete.svg"
 import editIcon from "../../assets/icons/edit.svg"
 import expandIcon from "../../assets/icons/expand.svg"
-import star from "../../assets/icons/star.svg"
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import AddMilestone from '../../components/AddMilestone/AddMilestone';
+import MilestoneListItem from '../../components/MilestoneListItem/MilestoneListItem';
+
 
 const AddTemplate = () => {
+
   const [selectedTemplate, setselectedTemplate] = useState("");
   const [newTask, setNewTask] = useState('')
   const [hint, setHint] = useState('');
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  }
+
+
+  const closeModal = () => {
+    setIsOpen(false);
+  }
 
   const dummyMilestoneData = [
 
@@ -56,64 +67,65 @@ const AddTemplate = () => {
   });
 
   const addTaskToMilestone = () => {
-    if (newTask.trim().length > 0 && selectedTemplate) {
-      const taskId = (Math.random() * 1000000).toString(); // Generating a unique ID
-      setTasks(prevTasks => {
-        if (prevTasks.hasOwnProperty(selectedTemplate)) {
-          return {
-            ...prevTasks,
-            [selectedTemplate]: [...prevTasks[selectedTemplate], { taskName: newTask, id: taskId }]
-          };
-        } else {
-          return prevTasks;
-        }
-      });
+    try {
+      if (newTask.trim().length > 0 && selectedTemplate) {
+        const taskId = (Math.random() * 1000000).toString(); // Generating a unique ID
+        setTasks(prevTasks => {
+          if (prevTasks?.hasOwnProperty(selectedTemplate)) {
+            return {
+              ...prevTasks,
+              [selectedTemplate]: [...prevTasks[selectedTemplate], { taskName: newTask, id: taskId }]
+            };
+          } else {
+            return {
+              ...prevTasks,
+              [selectedTemplate]: [{ taskName: newTask, id: taskId }]
+            };
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
+
     setNewTask("");
   };
 
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list[selectedTemplate]);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  };
+
   const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-  
-    if (!destination) {
+    // dropped outside the list
+    if (!result.destination) {
       return;
     }
-  
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-  
-    // Check if both source and destination milestones exist in tasks state
-    if (!tasks[source.droppableId] || !tasks[destination.droppableId]) {
-      console.error("Source or destination milestone not found in tasks state");
-      return;
-    }
-  
-    const sourceMilestone = tasks[source.droppableId];
-    const destinationMilestone = tasks[destination.droppableId];
-  
-    const updatedSourceMilestone = sourceMilestone.filter(
-      (task) => task.id !== draggableId
+
+    const reorderedItems = reorder(
+      tasks,
+      result.source.index,
+      result.destination.index
     );
-  
-    const updatedDestinationMilestone = [
-      ...destinationMilestone.slice(0, destination.index),
-      { taskName: draggableId, id: draggableId },
-      ...destinationMilestone.slice(destination.index)
-    ];
-  
+
     setTasks((prevTasks) => ({
       ...prevTasks,
-      [source.droppableId]: updatedSourceMilestone,
-      [destination.droppableId]: updatedDestinationMilestone
+      [selectedTemplate]: reorderedItems,
     }));
   };
-  
-  
-  
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -129,16 +141,15 @@ const AddTemplate = () => {
 
           onSubmit={(values, { resetForm }) => {
             console.log(values);
-            // You can perform submission logic here
             resetForm();
           }}
 
         >
-          {({ values, handleChange, handleBlur, errors, setFieldValue }) => (
+          {({ values, handleChange, handleBlur, setFieldValue }) => (
             <Form>
               <div className={styles.firstSection} >
                 <FormControl sx={{ m: 1, minWidth: 120 }} className={styles.inputField}>
-                  <span className={styles.title}>Template type </span>
+                  <span className={styles.title}>Template type <span className={styles.required}>*</span> </span>
                   <Select
                     name="templateType"
                     placeholder="select"
@@ -159,7 +170,7 @@ const AddTemplate = () => {
                 </FormControl>
 
                 <FormControl sx={{ m: 1, minWidth: 120 }} className={styles.inputField}>
-                  <span className={styles.title}>Template name </span>
+                  <span className={styles.title}>Template name <span className={styles.required}>*</span> </span>
                   <Select
                     name="templateName"
                     value={values.templateName}
@@ -190,21 +201,23 @@ const AddTemplate = () => {
               <div className={styles.thirdSection}>
                 <div className={styles.taskAddSection} >
                   <div className={styles.MilestoneFileds}>
-                    <span className={styles.title}>MileStone name </span>
+                    <span className={styles.title}>MileStone name  <span className={styles.required}>*</span></span>
                     <Autocomplete
-
                       sx={{ height: '38px' }}
                       value={selectedTemplate}
                       onChange={(event, newValue) => {
-                        setselectedTemplate(newValue ? newValue.label : '');
-                        setHint(newValue ? newValue.label : '');
+                        if (newValue?.label !== "Add New") {
+                          setselectedTemplate(newValue ? newValue?.label : '');
+                          setHint(newValue ? newValue?.label : '');
+                        }
+
                       }}
                       inputValue={selectedTemplate}
                       options={dummyMilestoneData}
-                      getOptionLabel={(option) => option.label}
+                      getOptionLabel={(option) => option.label ?? ""}
                       filterOptions={(options, state) => {
-                        const filteredOptions = options.filter((option) =>
-                          option.label.toLowerCase().includes(state.inputValue.toLowerCase())
+                        const filteredOptions = options?.filter((option) =>
+                          option?.label?.toLowerCase()?.includes(state?.inputValue?.toLowerCase())
                         );
                         if (!filteredOptions.some(option => option.label === "Add New")) {
                           filteredOptions.push({ label: "Add New" });
@@ -232,30 +245,31 @@ const AddTemplate = () => {
                       renderOption={(props, option) => {
                         if (option.label === "Add New") {
                           return (
-                            <div {...props} className={styles.addNewMilstone}>
-                              <div className={styles.plusIcon}>
-                                <img src={plusIcon} alt="+" srcset="" />
+                            <div className={styles.milestoneContent}>
+                              <div {...props} className={styles.addNewMilstone} onClick={openModal}>
+                                <div className={styles.plusIcon}>
+                                  <img src={plusIcon} alt="+" />
+                                </div>
+                                New milestone
                               </div>
-                              New milestone
                             </div>
+
                           );
                         } else {
                           return (
+                            <div className={styles.milestoneContent}>
                             <div {...props} className={styles.dropDownContents}>
                               {option.label}
+                            </div>
                             </div>
                           );
                         }
                       }}
-                    // PopperComponent={({ children, ...popperProps }) => (
-                    //   <Popper {...popperProps} placement="bottom-start" disablePortal style={{ zIndex: 1 }}>
-                    //     {children}
-                    //   </Popper>
-                    // )}
+
                     />
                   </div>
                   <div className={styles.MilestoneFileds}>
-                    <span className={styles.title}>Task name </span>
+                    <span className={styles.title}>Task name <span className={styles.required}>*</span> </span>
                     <TextField
                       className={styles.input}
                       onChange={(event) => { setNewTask(event.target.value) }}
@@ -263,7 +277,6 @@ const AddTemplate = () => {
                       id="outlined-password-input"
                       placeholder="Please type task name"
                       type="text"
-
                     />
                   </div>
                   <div className={styles.addTask} onClick={addTaskToMilestone}>
@@ -308,6 +321,7 @@ const AddTemplate = () => {
 
                   </Droppable>
                 </DragDropContext>
+
               </div>
 
               <div className={styles.saveSection}>
@@ -315,34 +329,11 @@ const AddTemplate = () => {
                   Save/Add new milestone
                 </div>
               </div>
-              {/* milestone lists */}
-              <div className={styles.mileStoneList}>
-                <div className={styles.mileStoneContainer}>
-                  <div className={styles.mileStoneTopSecion}>
-                    <div className={styles.mileStoneNameContianer}>
-                      <span>Milestone name :</span>
-                      <div className={styles.mileStoneName}>
-                        <img src={star} alt="*" />
-                        <span className={styles.mileStoneNamealign}> Milestone1</span>
-                      </div>
-                    </div>
-                    <div className={styles.actionContainer}>
-                      <img src={deletIcon} alt="delete" />
-                      <img src={editIcon} alt="edit" />
-                    </div>
-                  </div>
-                  <div className={styles.mileStoneSubSecion}>
-                    <span>Tasks :</span>
-                    <div className={styles.taskChipsConatiner}>
-                      <div className={styles.taskChip}>
-                        <div className={styles.taskIndexRound}>1</div>
-                        <span className={styles.taskNameSmall}>Task 1</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
+              {/* milestone lists ui loop though the milestone list data  */}
+              <MilestoneListItem />
+
+              {/* submit and cancel button */}
               <div className={styles.submitSection}>
                 <div className={styles.cancel}>
                   Cancel
@@ -351,11 +342,21 @@ const AddTemplate = () => {
                   submit
                 </div>
               </div>
+
             </Form>
 
           )}
         </Formik>
       </div>
+
+      {/* add new milestone */}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+      >
+        <AddMilestone closeModal={closeModal} />
+      </Modal>
     </div>
   )
 }

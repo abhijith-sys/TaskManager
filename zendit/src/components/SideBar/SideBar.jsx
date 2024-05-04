@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
-import styles from "./SideBar.module.css"
 
+import styles from "./SideBar.module.css"
+import PathConstants from '../../router/PathConstants';
 import logo from "../../assets/logo.svg"
 import icon1 from "../../assets/icons/icon1.svg"
 import icon2 from "../../assets/icons/icon2.svg"
@@ -11,7 +12,7 @@ import icon4 from "../../assets/icons/icon4.svg"
 import icon5 from "../../assets/icons/icon5.svg"
 import icon6 from "../../assets/icons/icon6.svg"
 import icon7 from "../../assets/icons/icon7.svg"
-import PathConstants from '../../router/PathConstants';
+
 
 
 const SideBar = () => {

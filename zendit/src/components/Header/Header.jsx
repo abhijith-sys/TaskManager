@@ -5,10 +5,9 @@ import dropIcon from '../../assets/drop.svg'
 const Header = () => {
   return (
     <div className={styles.headerContainer}>
-       <img src={defaultAvatarImage} alt="Avatar" className={styles.avatar} />
+      <img src={defaultAvatarImage} alt="Avatar" className={styles.avatar} />
       <span className={styles.userName}>David Nowak</span>
-      <img src={dropIcon} alt="button"  className={styles.dropBtn}/>
-      
+      <img src={dropIcon} alt="button" className={styles.dropBtn} />
     </div>
   )
 }

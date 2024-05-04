@@ -30,3 +30,11 @@ div.MuiInputBase-root:nth-child(1) {
 }
 
 
+
+
+
+.ReactModal__Content {
+  padding: 0px !important;
+  border-radius: 10px !important;
+}
+

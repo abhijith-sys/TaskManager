@@ -1,0 +1,72 @@
+.modalheading {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 500px;
+    border-bottom: 1px solid #E5E5E5;
+  }
+  
+  .modalHeadingtext {
+    font-size: 18px;
+    font-weight: 400;
+  }
+  
+  .closeModal {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: rgba(196, 196, 196, 0.3412);
+  }
+  
+  .modalForm{
+    padding: 20px;
+  }
+  
+  .modalField{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: 40px;
+  }
+
+  .submitSection {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+  }
+  
+  .cancel {
+    border: 1px solid #E8E9EB;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .submit {
+    background-color: #000080;
+    color: #FFFFFF;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .inputField {
+    width: 50%;
+  }
+
+  .required{
+    color: red;
+  }
