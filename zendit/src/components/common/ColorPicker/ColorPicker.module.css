@@ -1,4 +1,5 @@
 .colorBoxContainer {
+  position: relative;
   width: 40%;
 
 }

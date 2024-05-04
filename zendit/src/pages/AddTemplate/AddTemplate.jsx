@@ -206,7 +206,7 @@ const AddTemplate = () => {
                       sx={{ height: '38px' }}
                       value={selectedTemplate}
                       onChange={(event, newValue) => {
-                        if (newValue?.label !== "Add New") {
+                        if (newValue?.label !== "Add New" && newValue?.label !== "error") {
                           setselectedTemplate(newValue ? newValue?.label : '');
                           setHint(newValue ? newValue?.label : '');
                         }
@@ -219,9 +219,13 @@ const AddTemplate = () => {
                         const filteredOptions = options?.filter((option) =>
                           option?.label?.toLowerCase()?.includes(state?.inputValue?.toLowerCase())
                         );
+                        if (filteredOptions.length == 0) {
+                          filteredOptions.push({ label: "error" });
+                        }
                         if (!filteredOptions.some(option => option.label === "Add New")) {
                           filteredOptions.push({ label: "Add New" });
                         }
+
                         return filteredOptions;
                       }}
                       renderInput={(params) => (
@@ -243,6 +247,7 @@ const AddTemplate = () => {
                         />
                       )}
                       renderOption={(props, option) => {
+
                         if (option.label === "Add New") {
                           return (
                             <div className={styles.milestoneContent}>
@@ -255,17 +260,24 @@ const AddTemplate = () => {
                             </div>
 
                           );
+                        }
+                        else if (option.label === "error") {
+                          return (
+                            <div className={styles.milestoneContent}>
+                              <div {...props} className={styles.dropDownContentsError}>
+                                We didn't find any milestone with that name."Main install"
+                              </div>
+                            </div>)
                         } else {
                           return (
                             <div className={styles.milestoneContent}>
-                            <div {...props} className={styles.dropDownContents}>
-                              {option.label}
-                            </div>
+                              <div {...props} className={styles.dropDownContents}>
+                                {option.label}
+                              </div>
                             </div>
                           );
                         }
                       }}
-
                     />
                   </div>
                   <div className={styles.MilestoneFileds}>
@@ -332,7 +344,6 @@ const AddTemplate = () => {
 
               {/* milestone lists ui loop though the milestone list data  */}
               <MilestoneListItem />
-
               {/* submit and cancel button */}
               <div className={styles.submitSection}>
                 <div className={styles.cancel}>
@@ -342,7 +353,6 @@ const AddTemplate = () => {
                   submit
                 </div>
               </div>
-
             </Form>
 
           )}
