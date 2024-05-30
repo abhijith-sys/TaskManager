@@ -12,10 +12,11 @@ const MainRoute = () => {
   const routes = [
     { path: PathConstants.HOME, element: <Home /> },
     { path: PathConstants.TEMPLATES, element: <TemlatesLists/> },
-    { path: PathConstants.TEMPLATEADD, element: <AddTemplate/> }
+    { path: `${PathConstants.TEMPLATEADD}`, element: <AddTemplate/> },
+    { path: `${PathConstants.TEMPLATEADD}/:id`, element: <AddTemplate/> }
   ]
 
-  const router = createBrowserRouter([
+  const router = createBrowserRouter([,
     {
       path: "/",
       element: <Layout />,

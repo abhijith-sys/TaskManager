@@ -4,6 +4,7 @@ import SearchInput from '../../components/common/SearchInput/SearchInput';
 import TemplateTable from '../../components/TemplateTable/TemplateTable';
 import { useNavigate } from 'react-router-dom';
 import PathConstants from '../../router/PathConstants';
+import { getTemplateList } from '../../service/templateService';
 
 
 
@@ -13,8 +14,21 @@ import PathConstants from '../../router/PathConstants';
 const TemlatesLists = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [templateList, setTemplateList] = useState([]);
+
+  const getTemplateListWtihCompany = async () => {
+    try {
+      const companyId = 80;
+      const response = await getTemplateList(companyId);
+      setTemplateList(response?.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
+
+    getTemplateListWtihCompany();
     console.log("search", searchQuery);
   }, [searchQuery])
 
@@ -33,7 +47,7 @@ const TemlatesLists = () => {
   const handleEyeClick = (id) => {
     console.log('Clicked on eye icon for row with ID:', id);
 
-    navigate(PathConstants.TEMPLATEADD);
+    navigate(`${PathConstants.TEMPLATEADD}/${id}`);
   };
 
   const toTemplateAdd = () => {
@@ -50,7 +64,7 @@ const TemlatesLists = () => {
 
       <div className={styles.bottomSection}>
         <SearchInput onInputChange={handleSearchInputChange} />
-        <TemplateTable nodes={dummyData} onEyeClick={handleEyeClick} />
+        <TemplateTable nodes={templateList} onEyeClick={handleEyeClick} />
       </div>
     </div>
   )

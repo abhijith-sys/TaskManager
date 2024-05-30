@@ -18,12 +18,15 @@
 .createdBy {
   display: flex;
   align-items: center;
+  gap: 5px;
+
 }
 
 .createdBy img {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   margin-right: 5px;
+  border-radius: 50%;
 }
 
 .green {

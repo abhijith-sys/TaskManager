@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from "./AddTemplate.module.css";
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -16,15 +16,70 @@ import editIcon from "../../assets/icons/edit.svg"
 import expandIcon from "../../assets/icons/expand.svg"
 import AddMilestone from '../../components/AddMilestone/AddMilestone';
 import MilestoneListItem from '../../components/MilestoneListItem/MilestoneListItem';
-
+import { addTemplate, getMilestone, getTemplateDetails, getTemplateTypes } from '../../service/templateService';
+import { useNavigate, useParams } from 'react-router-dom';
+import PathConstants from '../../router/PathConstants';
 
 const AddTemplate = () => {
-
+  const navigate = useNavigate()
+  const { id = false } = useParams();
   const [selectedTemplate, setselectedTemplate] = useState("");
   const [newTask, setNewTask] = useState('')
   const [hint, setHint] = useState('');
   const [modalIsOpen, setIsOpen] = useState(false);
-  
+
+  const [templateTypes, setTemplateTypes] = useState([]);
+  const [templateValue, setTemplateValue] = useState({});
+  const [milestoneNames, setMilestoneNames] = useState([])
+
+  const getTemplateTypeByCompanyId = async () => {
+    try {
+      const data = {
+        company_id: 80,
+        id: 0,
+        type: 0
+      }
+      const response = await getTemplateTypes(data);
+      setTemplateTypes(response?.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const getTemplateDetailsById = async () => {
+    try {
+
+      const response = await getTemplateDetails(id);
+      console.log(response?.data[0]);
+      setTemplateValue(response?.data[0])
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getMilestoneNamesByCompanyId = async () => {
+    try {
+      const data = {
+        company_id: 80,
+        type: 0
+      }
+      const response = await getMilestone(data);
+      console.log(response?.data);
+      setMilestoneNames(response?.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+
+  useEffect(() => {
+    getTemplateTypeByCompanyId();
+    if (id) {
+      getTemplateDetailsById();
+    }
+    getMilestoneNamesByCompanyId();
+  }, [id])
+
   const openModal = () => {
     setIsOpen(true);
   }
@@ -127,6 +182,20 @@ const AddTemplate = () => {
       transform: 'translate(-50%, -50%)',
     },
   };
+
+  const addnewTemplates = async (data) => {
+    const combinedData = { ...data, ...tasks }
+    try {
+      const response = await addTemplate(combinedData);
+      alert("template added sucessfully");
+      navigate(PathConstants.HOME)
+    } catch (error) {
+      console.log(error);
+      alert("template error");
+    }
+
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -135,57 +204,55 @@ const AddTemplate = () => {
       <div className={styles.bottomSection}>
         <Formik
           initialValues={{
-            templateType: '', templateName: '', progressColor: '#FFA500',
-            completedColor: '#008000', delayedColor: '#FF0000',
-            milestones: [{ name: '', tasks: [''] }]
+            template_type: templateValue?.template_type || '', template_name: templateValue?.template_name || '', progressColor: templateValue?.colour?.[0]?.color || '#FFA500',
+            completedColor: templateValue?.colour?.[1]?.color || '#008000', delayedColor: templateValue?.colour?.[2]?.color || '#FF0000',
+            milestones: [{ name: '', tasks: templateValue?.tasks || [''] }]
           }}
 
           onSubmit={(values, { resetForm }) => {
             console.log(values);
+            addnewTemplates(values)
             resetForm();
           }}
 
         >
-          {({ values, handleChange, handleBlur, setFieldValue }) => (
+          {({ values, handleChange, handleBlur, setFieldValue, submitForm }) => (
             <Form>
               <div className={styles.firstSection} >
                 <FormControl sx={{ m: 1, minWidth: 120 }} className={styles.inputField}>
                   <span className={styles.title}>Template type <span className={styles.required}>*</span> </span>
                   <Select
-                    name="templateType"
+                    name="template_type"
                     placeholder="select"
 
-                    value={values.templateType}
-                    onChange={handleChange('templateType')}
-                    onBlur={handleBlur('templateType')}
+                    value={values.template_type}
+                    onChange={handleChange('template_type')}
+                    onBlur={handleBlur('template_type')}
                     className={styles.dropdownWidth}
                   >
                     <MenuItem value=" " disabled className={styles.selectItems}>
                       select
                     </MenuItem>
-
-                    <MenuItem value="option1" className={styles.selectItems}>Crane</MenuItem>
-                    <MenuItem value="option2" className={styles.selectItems}>Installa</MenuItem>
+                    {templateTypes.map((data) => {
+                      return (
+                        <MenuItem value={data?.id} className={styles.selectItems}>{data?.template_name}</MenuItem>
+                      )
+                    })}
                   </Select>
                   <ErrorMessage name="templateType" component="div" className={styles.error} />
                 </FormControl>
 
                 <FormControl sx={{ m: 1, minWidth: 120 }} className={styles.inputField}>
                   <span className={styles.title}>Template name <span className={styles.required}>*</span> </span>
-                  <Select
-                    name="templateName"
-                    value={values.templateName}
-                    onChange={handleChange('templateName')}
-                    onBlur={handleBlur('templateName')}
-                    className={styles.dropdownWidth}
-                  >
-                    <MenuItem value=" " disabled className={styles.selectItems}>
-                      Please select
-                    </MenuItem>
-
-                    <MenuItem value="option1" className={styles.selectItems}>name  1</MenuItem>
-                    <MenuItem value="option2" className={styles.selectItems}>name 2</MenuItem>
-                  </Select>
+                  <TextField
+                    className={styles.input}
+                    onChange={handleChange('template_name')}
+                    onBlur={handleBlur('template_name')}
+                    value={values.template_name}
+                    id="outlined-password-input"
+                    placeholder="Please type "
+                    type="text"
+                  />
                   <ErrorMessage name="templateType" component="div" className={styles.error} />
                 </FormControl>
               </div>
@@ -351,7 +418,7 @@ const AddTemplate = () => {
                 <div className={styles.cancel}>
                   Cancel
                 </div>
-                <div className={styles.submit}>
+                <div className={styles.submit} onClick={submitForm} >
                   submit
                 </div>
               </div>
